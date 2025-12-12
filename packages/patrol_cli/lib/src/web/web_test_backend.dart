@@ -429,11 +429,12 @@ class WebTestBackend {
         ..detail('Test results will be saved to: $testResultsDir')
         ..detail('Test report will be saved to: $testReportDir');
 
-      final playwrightProcess =
-          await _processManager.start(
-              ['npx', 'playwright', 'test', 'tests/test.spec.ts'],
-              workingDirectory: webRunnerPath,
-              environment: {
+      // Debug logging for screenshot environment
+      _logger.info('[SCREENSHOT DEBUG] Shell environment check:');
+      _logger.info('[SCREENSHOT DEBUG]   PATROL_WEB_SCREENSHOTS=${Platform.environment['PATROL_WEB_SCREENSHOTS']}');
+      _logger.info('[SCREENSHOT DEBUG]   PATROL_WEB_SCREENSHOT_DIR=${Platform.environment['PATROL_WEB_SCREENSHOT_DIR']}');
+
+      final environment = {
                 ...Platform.environment,
                 'BASE_URL': baseUrl,
                 'PATROL_TEST_RESULTS_DIR': testResultsDir,
@@ -474,7 +475,24 @@ class WebTestBackend {
                   'PATROL_WEB_SCREENSHOTS': options.screenshots.toString(),
                 if (options.screenshotDir != null)
                   'PATROL_WEB_SCREENSHOT_DIR': options.screenshotDir.toString(),
-              },
+              };
+
+      _logger.info('[SCREENSHOT DEBUG] Final environment passed to Playwright:');
+      _logger.info('[SCREENSHOT DEBUG]   PATROL_WEB_SCREENSHOTS=${environment['PATROL_WEB_SCREENSHOTS']}');
+      _logger.info('[SCREENSHOT DEBUG]   PATROL_WEB_SCREENSHOT_DIR=${environment['PATROL_WEB_SCREENSHOT_DIR']}');
+      _logger.info('[SCREENSHOT DEBUG] Full environment dump:');
+      environment.forEach((key, value) {
+        if (key.startsWith('PATROL_')) {
+          _logger.info('[SCREENSHOT DEBUG]   $key=$value');
+        }
+      });
+      _logger.info('[SCREENSHOT DEBUG] Starting Playwright process...');
+
+      final playwrightProcess =
+          await _processManager.start(
+              ['npx', 'playwright', 'test', 'tests/test.spec.ts'],
+              workingDirectory: webRunnerPath,
+              environment: environment,
               runInShell: true,
             )
             ..disposedBy(scope);
