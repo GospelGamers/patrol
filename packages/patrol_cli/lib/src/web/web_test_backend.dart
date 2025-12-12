@@ -207,7 +207,14 @@ class WebTestBackend {
           _logger.detail('Flutter: $line');
 
           // Look for the server URL in Flutter output
-          final urlMatch = RegExp(r'http://[^/]+:\d+').firstMatch(line);
+          // Support both HTTP and HTTPS
+          final urlMatch = RegExp(r'https?://[^/]+:\d+').firstMatch(line);
+
+          // Debug logging for URL detection
+          if (line.contains('being served') || line.contains('Web server started')) {
+            _logger.info('[DEBUG] Found server line: $line');
+            _logger.info('[DEBUG] Regex match result: ${urlMatch?.group(0)}');
+          }
 
           // [CHROME]: DevTools listening on ws://127.0.0.1:38861/devtools/browser/431953d3-ef67-428f-9321-9317256022d0
           if (urlMatch != null && !completer.isCompleted) {
