@@ -5,13 +5,20 @@ import { exposePatrolPlatformHandler } from "./patrolPlatformHandler"
 import { PatrolTestEntry } from "./types"
 
 // Debug: Log ALL environment variables at startup
-logger.info("=== ENVIRONMENT VARIABLES DEBUG ===")
-logger.info(`BASE_URL: ${process.env.BASE_URL}`)
-logger.info(`PATROL_WEB_SCREENSHOTS: ${process.env.PATROL_WEB_SCREENSHOTS}`)
-logger.info(`PATROL_WEB_SCREENSHOT_DIR: ${process.env.PATROL_WEB_SCREENSHOT_DIR}`)
-logger.info(`PATROL_WEB_HEADLESS: ${process.env.PATROL_WEB_HEADLESS}`)
-logger.info(`PATROL_WEB_IGNORE_HTTPS_ERRORS: ${process.env.PATROL_WEB_IGNORE_HTTPS_ERRORS}`)
-logger.info("===================================")
+// eslint-disable-next-line no-console
+console.log("=== ENVIRONMENT VARIABLES DEBUG ===")
+// eslint-disable-next-line no-console
+console.log(`BASE_URL: ${process.env.BASE_URL}`)
+// eslint-disable-next-line no-console
+console.log(`PATROL_WEB_SCREENSHOTS: ${process.env.PATROL_WEB_SCREENSHOTS}`)
+// eslint-disable-next-line no-console
+console.log(`PATROL_WEB_SCREENSHOT_DIR: ${process.env.PATROL_WEB_SCREENSHOT_DIR}`)
+// eslint-disable-next-line no-console
+console.log(`PATROL_WEB_HEADLESS: ${process.env.PATROL_WEB_HEADLESS}`)
+// eslint-disable-next-line no-console
+console.log(`PATROL_WEB_IGNORE_HTTPS_ERRORS: ${process.env.PATROL_WEB_IGNORE_HTTPS_ERRORS}`)
+// eslint-disable-next-line no-console
+console.log("===================================")
 
 const tests: PatrolTestEntry[] = process.env.PATROL_TESTS ? JSON.parse(process.env.PATROL_TESTS) : []
 if (tests.length === 0) {
@@ -54,10 +61,14 @@ for (const { name, skip, tags } of tests) {
     await page.evaluate(async name => await window.__patrol__runTest!(name), name)
 
     // Debug logging for screenshot environment variables
-    logger.info(`[SCREENSHOT DEBUG] Test completed: ${name}`)
-    logger.info(`[SCREENSHOT DEBUG] PATROL_WEB_SCREENSHOTS = "${process.env.PATROL_WEB_SCREENSHOTS}"`)
-    logger.info(`[SCREENSHOT DEBUG] PATROL_WEB_SCREENSHOT_DIR = "${process.env.PATROL_WEB_SCREENSHOT_DIR}"`)
-    logger.info(`[SCREENSHOT DEBUG] Will capture screenshot: ${process.env.PATROL_WEB_SCREENSHOTS === "true"}`)
+    // eslint-disable-next-line no-console
+    console.log(`[SCREENSHOT DEBUG] Test completed: ${name}`)
+    // eslint-disable-next-line no-console
+    console.log(`[SCREENSHOT DEBUG] PATROL_WEB_SCREENSHOTS = "${process.env.PATROL_WEB_SCREENSHOTS}"`)
+    // eslint-disable-next-line no-console
+    console.log(`[SCREENSHOT DEBUG] PATROL_WEB_SCREENSHOT_DIR = "${process.env.PATROL_WEB_SCREENSHOT_DIR}"`)
+    // eslint-disable-next-line no-console
+    console.log(`[SCREENSHOT DEBUG] Will capture screenshot: ${process.env.PATROL_WEB_SCREENSHOTS === "true"}`)
 
     // Take screenshot after test completes (if PATROL_WEB_SCREENSHOTS is enabled)
     if (process.env.PATROL_WEB_SCREENSHOTS === "true") {
@@ -65,14 +76,16 @@ for (const { name, skip, tags } of tests) {
       const sanitizedName = name.replace(/[^a-z0-9]/gi, "_").toLowerCase()
       const screenshotPath = `${screenshotDir}/${sanitizedName}.png`
 
-      logger.info(`[SCREENSHOT] Capturing screenshot to: ${screenshotPath}`)
+      // eslint-disable-next-line no-console
+      console.log(`[SCREENSHOT] Capturing screenshot to: ${screenshotPath}`)
 
       await page.screenshot({
         path: screenshotPath,
         fullPage: true
       })
 
-      logger.info(`[SCREENSHOT] ✅ Screenshot saved successfully: ${screenshotPath}`)
+      // eslint-disable-next-line no-console
+      console.log(`[SCREENSHOT] ✅ Screenshot saved successfully: ${screenshotPath}`)
 
       // Attach screenshot to test report
       await testInfo.attach("screenshot", {
@@ -80,7 +93,8 @@ for (const { name, skip, tags } of tests) {
         contentType: "image/png",
       })
     } else {
-      logger.info(`[SCREENSHOT] ⏭️  Skipping screenshot capture (not enabled)`)
+      // eslint-disable-next-line no-console
+      console.log(`[SCREENSHOT] ⏭️  Skipping screenshot capture (not enabled)`)
     }
   })
 }
