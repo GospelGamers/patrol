@@ -210,11 +210,6 @@ class WebTestBackend {
           // Support both HTTP and HTTPS
           final urlMatch = RegExp(r'https?://[^/]+:\d+').firstMatch(line);
 
-          // Debug logging for URL detection
-          if (line.contains('being served') || line.contains('Web server started')) {
-            _logger.info('[DEBUG] Found server line: $line');
-            _logger.info('[DEBUG] Regex match result: ${urlMatch?.group(0)}');
-          }
 
           // [CHROME]: DevTools listening on ws://127.0.0.1:38861/devtools/browser/431953d3-ef67-428f-9321-9317256022d0
           if (urlMatch != null && !completer.isCompleted) {
@@ -432,64 +427,47 @@ class WebTestBackend {
         ..detail('Test report will be saved to: $testReportDir')
         ..detail('Screenshots will be saved to: $screenshotDir');
 
-      // Debug logging for screenshot environment
-      _logger.info('[SCREENSHOT DEBUG] Shell environment check:');
-      _logger.info('[SCREENSHOT DEBUG]   PATROL_WEB_SCREENSHOTS=${Platform.environment['PATROL_WEB_SCREENSHOTS']}');
-      _logger.info('[SCREENSHOT DEBUG]   PATROL_WEB_SCREENSHOT_DIR=${Platform.environment['PATROL_WEB_SCREENSHOT_DIR']}');
-
       final environment = {
-                ...Platform.environment,
-                'BASE_URL': baseUrl,
-                'PATROL_TEST_RESULTS_DIR': testResultsDir,
-                'PATROL_TEST_REPORT_DIR': testReportDir,
-                'PATROL_WEB_SCREENSHOT_DIR': screenshotDir,
-                if (options.retries != null)
-                  'PATROL_WEB_RETRIES': options.retries.toString(),
-                if (options.video != null)
-                  'PATROL_WEB_VIDEO': options.video.toString(),
-                if (options.timeout != null)
-                  'PATROL_WEB_TIMEOUT': options.timeout.toString(),
-                if (options.workers != null)
-                  'PATROL_WEB_WORKERS': options.workers.toString(),
-                if (options.reporter != null)
-                  'PATROL_WEB_REPORTER': options.reporter.toString(),
-                if (options.locale != null)
-                  'PATROL_WEB_LOCALE': options.locale.toString(),
-                if (options.timezone != null)
-                  'PATROL_WEB_TIMEZONE': options.timezone.toString(),
-                if (options.colorScheme != null)
-                  'PATROL_WEB_COLOR_SCHEME': options.colorScheme.toString(),
-                if (options.geolocation != null)
-                  'PATROL_WEB_GEOLOCATION': options.geolocation.toString(),
-                if (options.permissions != null)
-                  'PATROL_WEB_PERMISSIONS': options.permissions.toString(),
-                if (options.userAgent != null)
-                  'PATROL_WEB_USER_AGENT': options.userAgent.toString(),
-                if (options.viewport != null)
-                  'PATROL_WEB_VIEWPORT': options.viewport.toString(),
-                if (options.globalTimeout != null)
-                  'PATROL_WEB_GLOBAL_TIMEOUT': options.globalTimeout.toString(),
-                if (options.shard != null)
-                  'PATROL_WEB_SHARD': options.shard.toString(),
-                if (options.headless != null)
-                  'PATROL_WEB_HEADLESS': options.headless.toString(),
-                if (options.ignoreHttpsErrors != null)
-                  'PATROL_WEB_IGNORE_HTTPS_ERRORS': options.ignoreHttpsErrors.toString(),
-                if (options.screenshots != null)
-                  'PATROL_WEB_SCREENSHOTS': options.screenshots.toString(),
-                // screenshotDir is always set (either from options or default above)
-              };
-
-      _logger.info('[SCREENSHOT DEBUG] Final environment passed to Playwright:');
-      _logger.info('[SCREENSHOT DEBUG]   PATROL_WEB_SCREENSHOTS=${environment['PATROL_WEB_SCREENSHOTS']}');
-      _logger.info('[SCREENSHOT DEBUG]   PATROL_WEB_SCREENSHOT_DIR=${environment['PATROL_WEB_SCREENSHOT_DIR']}');
-      _logger.info('[SCREENSHOT DEBUG] Full environment dump:');
-      environment.forEach((key, value) {
-        if (key.startsWith('PATROL_')) {
-          _logger.info('[SCREENSHOT DEBUG]   $key=$value');
-        }
-      });
-      _logger.info('[SCREENSHOT DEBUG] Starting Playwright process...');
+        ...Platform.environment,
+        'BASE_URL': baseUrl,
+        'PATROL_TEST_RESULTS_DIR': testResultsDir,
+        'PATROL_TEST_REPORT_DIR': testReportDir,
+        'PATROL_WEB_SCREENSHOT_DIR': screenshotDir,
+        if (options.retries != null)
+          'PATROL_WEB_RETRIES': options.retries.toString(),
+        if (options.video != null) 'PATROL_WEB_VIDEO': options.video.toString(),
+        if (options.timeout != null)
+          'PATROL_WEB_TIMEOUT': options.timeout.toString(),
+        if (options.workers != null)
+          'PATROL_WEB_WORKERS': options.workers.toString(),
+        if (options.reporter != null)
+          'PATROL_WEB_REPORTER': options.reporter.toString(),
+        if (options.locale != null)
+          'PATROL_WEB_LOCALE': options.locale.toString(),
+        if (options.timezone != null)
+          'PATROL_WEB_TIMEZONE': options.timezone.toString(),
+        if (options.colorScheme != null)
+          'PATROL_WEB_COLOR_SCHEME': options.colorScheme.toString(),
+        if (options.geolocation != null)
+          'PATROL_WEB_GEOLOCATION': options.geolocation.toString(),
+        if (options.permissions != null)
+          'PATROL_WEB_PERMISSIONS': options.permissions.toString(),
+        if (options.userAgent != null)
+          'PATROL_WEB_USER_AGENT': options.userAgent.toString(),
+        if (options.viewport != null)
+          'PATROL_WEB_VIEWPORT': options.viewport.toString(),
+        if (options.globalTimeout != null)
+          'PATROL_WEB_GLOBAL_TIMEOUT': options.globalTimeout.toString(),
+        if (options.shard != null) 'PATROL_WEB_SHARD': options.shard.toString(),
+        if (options.headless != null)
+          'PATROL_WEB_HEADLESS': options.headless.toString(),
+        if (options.ignoreHttpsErrors != null)
+          'PATROL_WEB_IGNORE_HTTPS_ERRORS': options.ignoreHttpsErrors
+              .toString(),
+        if (options.screenshots != null)
+          'PATROL_WEB_SCREENSHOTS': options.screenshots.toString(),
+        // screenshotDir is always set (either from options or default above)
+      };
 
       final playwrightProcess =
           await _processManager.start(
