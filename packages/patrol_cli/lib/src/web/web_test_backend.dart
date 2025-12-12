@@ -424,10 +424,13 @@ class WebTestBackend {
           options.resultsDir ?? '${Directory.current.path}/test-results';
       final testReportDir =
           options.reportDir ?? '${Directory.current.path}/playwright-report';
+      final screenshotDir =
+          options.screenshotDir ?? '${Directory.current.path}/screenshots';
 
       _logger
         ..detail('Test results will be saved to: $testResultsDir')
-        ..detail('Test report will be saved to: $testReportDir');
+        ..detail('Test report will be saved to: $testReportDir')
+        ..detail('Screenshots will be saved to: $screenshotDir');
 
       // Debug logging for screenshot environment
       _logger.info('[SCREENSHOT DEBUG] Shell environment check:');
@@ -439,6 +442,7 @@ class WebTestBackend {
                 'BASE_URL': baseUrl,
                 'PATROL_TEST_RESULTS_DIR': testResultsDir,
                 'PATROL_TEST_REPORT_DIR': testReportDir,
+                'PATROL_WEB_SCREENSHOT_DIR': screenshotDir,
                 if (options.retries != null)
                   'PATROL_WEB_RETRIES': options.retries.toString(),
                 if (options.video != null)
@@ -473,8 +477,7 @@ class WebTestBackend {
                   'PATROL_WEB_IGNORE_HTTPS_ERRORS': options.ignoreHttpsErrors.toString(),
                 if (options.screenshots != null)
                   'PATROL_WEB_SCREENSHOTS': options.screenshots.toString(),
-                if (options.screenshotDir != null)
-                  'PATROL_WEB_SCREENSHOT_DIR': options.screenshotDir.toString(),
+                // screenshotDir is always set (either from options or default above)
               };
 
       _logger.info('[SCREENSHOT DEBUG] Final environment passed to Playwright:');
