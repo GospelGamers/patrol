@@ -467,6 +467,8 @@ class WebTestBackend {
                   'PATROL_WEB_SHARD': options.shard.toString(),
                 if (options.headless != null)
                   'PATROL_WEB_HEADLESS': options.headless.toString(),
+                if (options.ignoreHttpsErrors != null)
+                  'PATROL_WEB_IGNORE_HTTPS_ERRORS': options.ignoreHttpsErrors.toString(),
                 ...Platform.environment,
               },
               runInShell: true,

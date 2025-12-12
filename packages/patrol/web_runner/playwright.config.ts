@@ -32,6 +32,9 @@ const viewport = process.env.PATROL_WEB_VIEWPORT
   : undefined
 const shard = process.env.PATROL_WEB_SHARD ? parseShard(process.env.PATROL_WEB_SHARD) : undefined
 const headless = process.env.PATROL_WEB_HEADLESS ? process.env.PATROL_WEB_HEADLESS === "true" : false
+const ignoreHttpsErrors = process.env.PATROL_WEB_IGNORE_HTTPS_ERRORS
+  ? process.env.PATROL_WEB_IGNORE_HTTPS_ERRORS === "true"
+  : false
 
 export default defineConfig({
   use: {
@@ -45,10 +48,12 @@ export default defineConfig({
     permissions,
     userAgent,
     viewport,
-    ignoreHTTPSErrors: true,
-    launchOptions: {
-      args: ['--ignore-certificate-errors', '--disable-web-security'],
-    },
+    ignoreHTTPSErrors: ignoreHttpsErrors,
+    ...(ignoreHttpsErrors && {
+      launchOptions: {
+        args: ['--ignore-certificate-errors', '--disable-web-security'],
+      },
+    }),
   },
   globalSetup: require.resolve("./tests/setup"),
   outputDir,

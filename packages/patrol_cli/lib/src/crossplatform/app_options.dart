@@ -406,6 +406,7 @@ class WebAppOptions {
     this.globalTimeout,
     this.shard,
     this.headless,
+    this.ignoreHttpsErrors,
   });
 
   final FlutterAppOptions flutter;
@@ -426,4 +427,5 @@ class WebAppOptions {
   final int? globalTimeout;
   final String? shard;
   final String? headless;
+  final String? ignoreHttpsErrors;
 }
