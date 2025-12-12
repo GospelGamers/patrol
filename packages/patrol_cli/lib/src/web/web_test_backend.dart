@@ -434,6 +434,7 @@ class WebTestBackend {
               ['npx', 'playwright', 'test', 'tests/test.spec.ts'],
               workingDirectory: webRunnerPath,
               environment: {
+                ...Platform.environment,
                 'BASE_URL': baseUrl,
                 'PATROL_TEST_RESULTS_DIR': testResultsDir,
                 'PATROL_TEST_REPORT_DIR': testReportDir,
@@ -473,7 +474,6 @@ class WebTestBackend {
                   'PATROL_WEB_SCREENSHOTS': options.screenshots.toString(),
                 if (options.screenshotDir != null)
                   'PATROL_WEB_SCREENSHOT_DIR': options.screenshotDir.toString(),
-                ...Platform.environment,
               },
               runInShell: true,
             )
