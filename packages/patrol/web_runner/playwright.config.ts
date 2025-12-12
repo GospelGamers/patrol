@@ -45,6 +45,10 @@ export default defineConfig({
     permissions,
     userAgent,
     viewport,
+    ignoreHTTPSErrors: true,
+    launchOptions: {
+      args: ['--ignore-certificate-errors', '--disable-web-security'],
+    },
   },
   globalSetup: require.resolve("./tests/setup"),
   outputDir,
