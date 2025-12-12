@@ -34,7 +34,7 @@ export const patrolTest = base.extend({
 })
 
 for (const { name, skip, tags } of tests) {
-  patrolTest(name, { tag: tags }, async ({ page }) => {
+  patrolTest(name, { tag: tags }, async ({ page }, testInfo) => {
     patrolTest.skip(skip)
 
     await page.waitForFunction(() => window.__patrol__runTest, {
@@ -43,5 +43,25 @@ for (const { name, skip, tags } of tests) {
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await page.evaluate(async name => await window.__patrol__runTest!(name), name)
+
+    // Take screenshot after test completes (if PATROL_WEB_SCREENSHOTS is enabled)
+    if (process.env.PATROL_WEB_SCREENSHOTS === "true") {
+      const screenshotDir = process.env.PATROL_WEB_SCREENSHOT_DIR || "./screenshots"
+      const sanitizedName = name.replace(/[^a-z0-9]/gi, "_").toLowerCase()
+      const screenshotPath = `${screenshotDir}/${sanitizedName}.png`
+
+      await page.screenshot({
+        path: screenshotPath,
+        fullPage: true
+      })
+
+      logger.info(`Screenshot saved to: ${screenshotPath}`)
+
+      // Attach screenshot to test report
+      await testInfo.attach("screenshot", {
+        path: screenshotPath,
+        contentType: "image/png",
+      })
+    }
   })
 }

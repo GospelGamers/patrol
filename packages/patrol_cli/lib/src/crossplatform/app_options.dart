@@ -407,6 +407,8 @@ class WebAppOptions {
     this.shard,
     this.headless,
     this.ignoreHttpsErrors,
+    this.screenshots,
+    this.screenshotDir,
   });
 
   final FlutterAppOptions flutter;
@@ -428,4 +430,6 @@ class WebAppOptions {
   final String? shard;
   final String? headless;
   final String? ignoreHttpsErrors;
+  final String? screenshots;
+  final String? screenshotDir;
 }

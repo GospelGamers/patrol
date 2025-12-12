@@ -469,6 +469,10 @@ class WebTestBackend {
                   'PATROL_WEB_HEADLESS': options.headless.toString(),
                 if (options.ignoreHttpsErrors != null)
                   'PATROL_WEB_IGNORE_HTTPS_ERRORS': options.ignoreHttpsErrors.toString(),
+                if (options.screenshots != null)
+                  'PATROL_WEB_SCREENSHOTS': options.screenshots.toString(),
+                if (options.screenshotDir != null)
+                  'PATROL_WEB_SCREENSHOT_DIR': options.screenshotDir.toString(),
                 ...Platform.environment,
               },
               runInShell: true,
