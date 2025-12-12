@@ -88,4 +88,17 @@ abstract interface class WebAutomator {
 
   /// Returns a list of all files downloaded during the single test.
   Future<List<String>> verifyFileDownloads();
+
+  /// Takes a screenshot of the current page.
+  ///
+  /// [name] - Optional name for the screenshot file (defaults to timestamp).
+  /// [fullPage] - Whether to capture the full scrollable page (defaults to true).
+  /// [path] - Optional custom path for the screenshot.
+  ///
+  /// Returns a map containing the path where the screenshot was saved.
+  Future<Map<String, dynamic>> takeScreenshot({
+    String? name,
+    bool? fullPage,
+    String? path,
+  });
 }

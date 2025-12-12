@@ -696,4 +696,39 @@ class NativeAutomator {
   /// }
   /// ```
   Future<int> getOsVersion() => _platform.mobile.getOsVersion();
+
+  /// Takes a screenshot of the current page (Web only).
+  ///
+  /// [name] - Optional name for the screenshot file. If not provided,
+  ///          a timestamp-based name will be generated.
+  /// [fullPage] - Whether to capture the full scrollable page. Defaults to true.
+  /// [path] - Optional custom path for the screenshot. If not provided,
+  ///          the screenshot will be saved to the default screenshot directory.
+  ///
+  /// Returns a map containing the path where the screenshot was saved.
+  ///
+  /// Example:
+  /// ```dart
+  /// // Take a screenshot with a custom name
+  /// await $.native.takeScreenshot(name: 'login-page');
+  ///
+  /// // Take a screenshot of only the visible viewport
+  /// await $.native.takeScreenshot(
+  ///   name: 'header',
+  ///   fullPage: false,
+  /// );
+  /// ```
+  ///
+  /// Note: This method only works on Web. On mobile platforms, it will throw
+  /// an [UnimplementedError].
+  Future<Map<String, dynamic>> takeScreenshot({
+    String? name,
+    bool? fullPage,
+    String? path,
+  }) =>
+      _platform.web.takeScreenshot(
+        name: name,
+        fullPage: fullPage,
+        path: path,
+      );
 }

@@ -283,4 +283,23 @@ class WebAutomator implements web_automator.WebAutomator {
     );
     return (result as List<dynamic>).cast<String>();
   }
+
+  @override
+  Future<Map<String, dynamic>> takeScreenshot({
+    String? name,
+    bool? fullPage,
+    String? path,
+  }) async {
+    final result = await callPlaywright(
+      'takeScreenshot',
+      {
+        'name': name,
+        'fullPage': fullPage,
+        'path': path,
+      },
+      logger: _config.logger,
+      patrolLog: _patrolLog,
+    );
+    return (result as Map<Object?, Object?>).cast<String, dynamic>();
+  }
 }
